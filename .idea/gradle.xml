@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
@@ -10,6 +11,14 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/hidden-api-bypass" />
+            <option value="$PROJECT_DIR$/hidden-api-bypass/stub" />
+            <option value="$PROJECT_DIR$/hidden-api-bypass/unsafe" />
+            <option value="$PROJECT_DIR$/lib-aspectj-ipc" />
+            <option value="$PROJECT_DIR$/lib-aspectj-ipc/annotation" />
+            <option value="$PROJECT_DIR$/lib-aspectj-ipc/library" />
+            <option value="$PROJECT_DIR$/lib-aspectj-ipc/sample" />
+            <option value="$PROJECT_DIR$/lib-encrypt" />
           </set>
         </option>
       </GradleProjectSettings>
