@@ -1,0 +1,81 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.zipper.hiddenapibypass.dexfile'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 19
+        targetSdk 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+/**
+ * 将BootstrapClass生成对应的Class文件
+ */
+task compileBootstrap {
+    def buildOut = new File(project.buildDir, "dexfile")
+    def sdkRoot = getSdkPath()
+    if (buildOut.exists()) {
+        buildOut.mkdirs()
+    }
+    def compileSdkVersion = android.compileSdk
+
+    doFirst{
+        def sourceJavaPath = new File(projectDir, "src/main/java/com/zipper/hiddenapibypass/dexfile/BootstrapClass.java")
+        def sourceAndroidJar = new File(sdkRoot, "platforms/android-${compileSdkVersion}/android.jar").absolutePath
+        println "exec generate BootstrapClass.class"
+        def process = Runtime.getRuntime().exec(new String[]{"javac", "-cp", sourceAndroidJar, "-d", buildOut.absolutePath, sourceJavaPath})
+        println process.errorStream.newReader().readLines()
+        println "exec generate BootstrapClass success"
+
+    }
+
+    doLast{
+        def outClassPath = new File(buildOut, "com/zipper/hiddenapibypass/dexfile/BootstrapClass.class")
+        if (outClassPath.exists()) {
+            outClassPath.delete()
+        }
+        def d8 = new File(sdkRoot, "build-tools/${compileSdkVersion}.0.0/d8").absolutePath
+        println "exec generate dex file"
+        def process = Runtime.getRuntime().exec(new String[]{d8, "--output", buildOut.absolutePath, outClassPath})
+        println process.errorStream.newReader().readLines()
+        println "exec generate dex success"
+    }
+}
+
+
+String getSdkPath() {
+    def file = rootProject.file("local.properties")
+    try (InputStream inputStream = file.newDataInputStream()) {
+        def properties = new Properties()
+        properties.load(inputStream)
+        return properties.getProperty("sdk.dir")
+    }
+}
+
