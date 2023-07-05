@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/hidden-api-bypass" />
             <option value="$PROJECT_DIR$/hidden-api-bypass/dexfile" />
+            <option value="$PROJECT_DIR$/hidden-api-bypass/native-stack" />
             <option value="$PROJECT_DIR$/hidden-api-bypass/stub" />
             <option value="$PROJECT_DIR$/hidden-api-bypass/unsafe" />
             <option value="$PROJECT_DIR$/lib-aspectj-ipc" />
