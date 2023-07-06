@@ -11,22 +11,20 @@ void *run(void * args) {
         if (env == nullptr) {
             return (void *)ret;
         }
-        int size = sizeof(args);
-        jobjectArray arr = static_cast<jobjectArray>(args);
-        jobjectArray *arr2 = (jobjectArray*) args;
-        int size1 = sizeof(arr);
-        int size2 = sizeof(arr2);
+        auto arr = static_cast<jobjectArray>(args);
         int len = env->GetArrayLength(arr);
+        jclass stringClass = env->FindClass("java/lang/String");
+        jobjectArray newArray = env->NewObjectArray(len, stringClass, nullptr);
+        for (int i = 0; i < len; i++) {
+            auto item = env->GetObjectArrayElement(arr, i);
+            env->SetObjectArrayElement(newArray, i, item);
+        }
 
         jclass vmClass = env->FindClass("dalvik/system/VMRuntime");
         jmethodID runtimeMethod = env->GetStaticMethodID(vmClass, "getRuntime", "()Ldalvik/system/VMRuntime;");
         jobject runtime = env->CallStaticObjectMethod(vmClass, runtimeMethod);
         jmethodID setHiddenApiExemptionsMethodId = env->GetMethodID(vmClass, "setHiddenApiExemptions", "([Ljava/lang/String;)V");
-
-        jclass stringClass = env->FindClass("java/lang/String");
-        jobjectArray stringArray = env->NewObjectArray(1, stringClass, env->NewStringUTF("L"));
-
-        env->CallVoidMethod(runtime, setHiddenApiExemptionsMethodId, stringArray);
+        env->CallVoidMethod(runtime, setHiddenApiExemptionsMethodId, newArray);
         ret = 0;
     }
     return (void *)ret;
