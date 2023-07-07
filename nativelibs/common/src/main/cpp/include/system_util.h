@@ -3,6 +3,8 @@
 #include <android/api-level.h>
 #include <jni.h>
 #include <string>
+#include <list>
+#include <sys/system_properties.h>
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)                                                         \
     TypeName(const TypeName &) = delete;                                                           \
@@ -40,6 +42,17 @@ namespace common {
 
     /// 获取当前架构信息
     static constexpr auto arch = GetArch();
+
+    static inline auto GetAndroidApiLevel() {
+        static auto kApiLevel = []() -> int {
+            std::array<char, PROP_VALUE_MAX> prop_value;
+            __system_property_get("ro.build.version.sdk", prop_value.data());
+            int base = atoi(prop_value.data());
+            __system_property_get("ro.build.version.preview_sdk", prop_value.data());
+            return base + atoi(prop_value.data());
+        }();
+        return kApiLevel;
+    }
 
     template <typename T>
     concept JObject = std::is_base_of_v<std::remove_pointer_t<_jobject>, std::remove_pointer_t<T>>;

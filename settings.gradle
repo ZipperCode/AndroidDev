@@ -16,15 +16,16 @@ dependencyResolutionManagement {
 rootProject.name = "AndroidDev"
 include ':app'
 
-//include ':hidden-api-bypass'
+include ':hidden-api-bypass'
 //include ':hidden-api-bypass:unsafe'
 //include ':hidden-api-bypass:stub'
 //include ':hidden-api-bypass:dexfile'
-//include ':hidden-api-bypass:native-stack'
+include ':hidden-api-bypass:native-stack'
 
 //include ':core'
 // include ':lib-encrypt'
 
+include ':lib-aspectj-ipc'
 //include ':lib-aspectj-ipc:annotation'
 //include ':lib-aspectj-ipc:library'
 //include ':lib-aspectj-ipc:sample'

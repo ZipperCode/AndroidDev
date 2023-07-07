@@ -14,8 +14,14 @@ android {
         consumerProguardFiles "consumer-rules.pro"
         externalNativeBuild {
             cmake {
-                cppFlags ""
+                targets "hidden_api"
+                cppFlags "-std=c++20 -Oz -fvisibility=hidden"
+                abiFilters rootProject.ext.abiFilters as String[]
             }
+        }
+
+        ndk {
+            abiFilters rootProject.ext.abiFilters as String[]
         }
     }
 
@@ -31,6 +37,18 @@ android {
             version "3.22.1"
         }
     }
+
+    buildFeatures {
+        prefab true
+        prefabPublishing true
+    }
+
+    prefab {
+        xdl {
+            headers 'src/main/cpp/include'
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

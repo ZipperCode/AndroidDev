@@ -14,6 +14,9 @@
             <option value="$PROJECT_DIR$/develop" />
             <option value="$PROJECT_DIR$/develop/binder-canary" />
             <option value="$PROJECT_DIR$/develop/binder-canary-sample" />
+            <option value="$PROJECT_DIR$/hidden-api-bypass" />
+            <option value="$PROJECT_DIR$/hidden-api-bypass/native-stack" />
+            <option value="$PROJECT_DIR$/lib-aspectj-ipc" />
             <option value="$PROJECT_DIR$/nativelibs" />
             <option value="$PROJECT_DIR$/nativelibs/bhook" />
             <option value="$PROJECT_DIR$/nativelibs/common" />

@@ -31,7 +31,7 @@ find_package(common REQUIRED CONFIG)
 add_library(
         canary
         SHARED
-        canary.cpp)
+        binder_canary.cpp)
 
 
 find_library(
