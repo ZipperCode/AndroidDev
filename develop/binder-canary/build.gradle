@@ -18,7 +18,7 @@ android {
                 targets "canary"
                 // -D[编译参数]
                 // arguments '-DANDROID_STL=c++_static'
-                cppFlags "-std=c++17 -Oz -fvisibility=hidden"
+                cppFlags "-std=c++20 -Oz -fvisibility=hidden"
                 abiFilters rootProject.ext.abiFilters as String[]
             }
         }
@@ -44,6 +44,10 @@ android {
         }
     }
 
+    buildFeatures {
+        prefab true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -51,10 +55,20 @@ android {
 }
 
 dependencies {
-    implementation project(':nativelibs:bhook')
+    implementation project(':nativelibs:xdl')
+    implementation project(':nativelibs:common')
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
+
+//tasks.whenTaskAdded { task ->
+//    if (task.name == 'generateJsonModelDebug') {
+//        def depList = [':xdl:prefabDebugPackage', ':common:prefabDebugPackage']
+//        task.dependsOn(depList)
+//    } else if (task.name == 'generateJsonModelRelease') {
+//        task.dependsOn(':xdl:prefabReleasePackage')
+//    }
+//}

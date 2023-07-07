@@ -12,21 +12,21 @@ set(LIB_STATIC_ROOT ${ROOT_DIR}/nativeLibs/libs-static)
 message("LIB_STATIC_ROOT = ${LIB_STATIC_ROOT}")
 
 set(LIB_XDL "xdl")
-include_directories(
-        /include/**/*.h
-)
 
-add_library(
-        xdl
-        STATIC
-        IMPORTED
-)
+#add_library(
+#        xdl
+#        STATIC
+#        IMPORTED
+#)
+#
+#set_target_properties(
+#        xdl
+#        PROPERTIES IMPORTED_LOCATION
+#        "${LIB_STATIC_ROOT}/${CMAKE_BUILD_TYPE}/${LIB_XDL}/${ANDROID_ABI}/lib${LIB_XDL}.a"
+#)
 
-set_target_properties(
-        xdl
-        PROPERTIES IMPORTED_LOCATION
-        "${LIB_STATIC_ROOT}/${CMAKE_BUILD_TYPE}/${LIB_XDL}/${ANDROID_ABI}/lib${LIB_XDL}.a"
-)
+find_package(xdl REQUIRED CONFIG)
+find_package(common REQUIRED CONFIG)
 
 add_library(
         canary
@@ -43,5 +43,7 @@ find_library(
 target_link_libraries(
         canary
         ${log-lib}
-        ${LIB_XDL}
+        xdl::xdl
+        common::common
+#        ${LIB_XDL}
 )
