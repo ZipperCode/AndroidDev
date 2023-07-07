@@ -6,3 +6,4 @@ plugins {
     id 'io.github.wurensen.android-aspectjx' version '3.3.2' apply false
 }
 
+ext.abiFilters = ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64']
