@@ -3,7 +3,7 @@
 #include <android/api-level.h>
 #include <jni.h>
 #include <string>
-#include <list>
+#include <array>
 #include <sys/system_properties.h>
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)                                                         \
@@ -53,6 +53,8 @@ namespace common {
         }();
         return kApiLevel;
     }
+
+    static const auto sApiLevel = GetAndroidApiLevel();
 
     template <typename T>
     concept JObject = std::is_base_of_v<std::remove_pointer_t<_jobject>, std::remove_pointer_t<T>>;

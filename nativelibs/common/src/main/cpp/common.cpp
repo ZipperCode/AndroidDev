@@ -4,6 +4,7 @@
 #include <jni.h>
 #include "include/logging.h"
 #include "include/system_util.h"
+#include "include/ArtMethodHandle.h"
 
 static void test() {
 

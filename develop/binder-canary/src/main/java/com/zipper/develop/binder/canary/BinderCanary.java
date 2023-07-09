@@ -13,4 +13,5 @@ public class BinderCanary {
     }
 
     public static native boolean init(@NonNull MonitorConfig monitorConfig);
+
 }

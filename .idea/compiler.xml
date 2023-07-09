@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="11">
+      <module name="AndroidDev.core" target="11" />
+      <module name="AndroidDev.lib-aspectj-ipc.annotation" target="11" />
+      <module name="AndroidDev.lib-aspectj-ipc.annotation.main" target="11" />
+      <module name="AndroidDev.lib-aspectj-ipc.annotation.test" target="11" />
+      <module name="AndroidDev.lib-aspectj-ipc.library" target="11" />
+      <module name="AndroidDev.lib-aspectj-ipc.sample" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
