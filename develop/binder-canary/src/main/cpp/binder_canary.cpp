@@ -12,11 +12,13 @@
 #include "jni_hook.h"
 #include "ArtMethodHandle.h"
 
-static const JNINativeMethod gNativeRegisters[] = {
-        {"init", "(Lcom/zipper/develop/binder/canary/MonitorConfig;)Z", (void *) com_zipper_develop_binder_canary_BinderCanary_init}
-};
 
 JavaVM *gVm = nullptr;
+
+static struct BinderCanary_t{
+    jclass javaClass = nullptr;
+    jmethodID onReportMethod = nullptr;
+} gBinderCanaryT;
 
 bool hasInit = false;
 
@@ -26,21 +28,10 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *) {
         return JNI_ERR;
     }
     gVm = vm;
-
-    auto canaryClazz = env->FindClass("com/zipper/develop/binder/canary/BinderCanary");
-    if (env->RegisterNatives(canaryClazz, gNativeRegisters,
-                             sizeof(gNativeRegisters) / sizeof(gNativeRegisters[0])) != JNI_OK) {
-
-        return JNI_ERR;
-    }
-
     return JNI_VERSION_1_6;
 }
 
-
-extern "C"
-JNIEXPORT jboolean JNICALL
-com_zipper_develop_binder_canary_BinderCanary_init(JNIEnv *env, jclass clazz, jobject monitor_config) {
+JNI_STATIC_METHOD(jboolean, init)(JNIEnv *env, jclass clazz, jobject monitor_config) {
     if (hasInit) {
         LOGW(">> multi call init method，already init!!");
         return false;
@@ -51,21 +42,9 @@ com_zipper_develop_binder_canary_BinderCanary_init(JNIEnv *env, jclass clazz, jo
         return false;
     }
 
-    auto canaryClazz = env->FindClass("com/zipper/develop/binder/canary/BinderCanary");
-    auto initNativeMethod = gNativeRegisters[0];
-    auto registeredInitNativePtr = initNativeMethod.fnPtr;
-    jmethodID initMethodId = env->GetStaticMethodID(canaryClazz, gNativeRegisters[0].name, gNativeRegisters[0].signature);
-    auto artMethodPtr = GetArtMethodPtr(env, canaryClazz, initMethodId);
-    LOGD("registeredInitNativePtr = %p", registeredInitNativePtr);
-    LOGD("artMethodPtr = %p", artMethodPtr);
-    auto offset = (size_t) registeredInitNativePtr - (size_t) artMethodPtr;
-    LOGD("offset = %ud", offset);
-    auto artMethodOffset = ArtMethodHandle::get().getArtMethodOffset();
-    auto artMethodPre2 = ArtMethodHandle::get().getArtMethodPtr(env, canaryClazz, initMethodId);
-    auto jniInitPtr = ArtMethodHandle::get().getJNIFuncPtr(env, canaryClazz, initMethodId);
-    LOGD("artMethodOffset = %d", artMethodOffset);
-    LOGD("artMethodPre2 = %p", artMethodPre2);
-    LOGD("jniInitPtr = %p", jniInitPtr);
+
+    auto canaryClazz = (jclass) env->NewGlobalRef(env->FindClass("com/zipper/develop/binder/canary/BinderCanary"));
+
 
     init_java_monitor_type(env, monitor_config);
 
@@ -73,6 +52,14 @@ com_zipper_develop_binder_canary_BinderCanary_init(JNIEnv *env, jclass clazz, jo
     gMonitorConfig.monitor_large_data = get_config_monitor_large_data(env);
     gMonitorConfig.block_time_threshold_mills = get_config_block_time_ms(env);
     gMonitorConfig.large_data_factor = get_config_large_data_factor(env);
-
+    hasInit = true;
     return hasInit;
+}
+
+JNI_STATIC_METHOD(jboolean, monitor)(JNIEnv *env, jclass clazz) {
+    return JNI_FALSE;
+}
+
+JNI_STATIC_METHOD(jboolean, unmonitored)(JNIEnv *env, jclass clazz) {
+    return JNI_FALSE;
 }
