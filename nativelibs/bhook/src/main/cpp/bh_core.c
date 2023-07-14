@@ -106,7 +106,7 @@ int bh_core_init(int mode, bool debug) {
   }
   pthread_mutex_unlock(&lock);
 
-  BH_LOG_SHOW("%s: bytehook init(mode: %s, debug: %s), return: %d", bytehook_get_version(),
+  BH_LOG_SHOW("%s: bytehook checkInit(mode: %s, debug: %s), return: %d", bytehook_get_version(),
               BYTEHOOK_MODE_AUTOMATIC == mode ? "AUTOMATIC" : "MANUAL", debug ? "true" : "false",
               bh_core.init_status);
   return bh_core.init_status;

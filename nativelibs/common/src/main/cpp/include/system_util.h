@@ -5,6 +5,7 @@
 #include <string>
 #include <array>
 #include <sys/system_properties.h>
+#include <unistd.h>
 
 namespace common {
 
@@ -52,6 +53,16 @@ namespace common {
 
     static const auto sApiLevel = GetAndroidApiLevel();
 
+
+    static inline long GetCurrentTimeMills() {
+        timeval tv;
+        gettimeofday(&tv, nullptr);
+        return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+    }
+
+    static inline bool IsMainThread() {
+        return getpid() == gettid();
+    }
 }
 
 

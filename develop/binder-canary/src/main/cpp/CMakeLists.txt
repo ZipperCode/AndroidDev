@@ -27,11 +27,14 @@ set(LIB_XDL "xdl")
 
 find_package(xdl REQUIRED CONFIG)
 find_package(common REQUIRED CONFIG)
+find_package(bhook REQUIRED CONFIG)
 
 add_library(
         canary
         SHARED
-        binder_canary.cpp)
+        binder_canary.cpp
+        binder_hook.cpp
+)
 
 
 find_library(
@@ -45,5 +48,6 @@ target_link_libraries(
         ${log-lib}
         xdl::xdl
         common::common
+        bhook::bytehook
 #        ${LIB_XDL}
 )

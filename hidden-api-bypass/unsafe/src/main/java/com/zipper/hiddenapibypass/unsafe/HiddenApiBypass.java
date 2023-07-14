@@ -202,7 +202,7 @@ public final class HiddenApiBypass {
             if (DEBUG) Log.v(TAG, "got " + clazz.getTypeName() + "." + stub.getName() +
                     "(" + Arrays.stream(stub.getParameterTypes()).map(Type::getTypeName).collect(Collectors.joining()) + ")");
             // TODO 猜测artMethod方法被替换的时候，name也被替换了
-            if ("<init>".equals(stub.getName())) {
+            if ("<checkInit>".equals(stub.getName())) {
                 unsafe.putLong(ctor, methodOffset, method);
                 unsafe.putObject(ctor, classOffset, clazz);
                 Class<?>[] params = ctor.getParameterTypes();

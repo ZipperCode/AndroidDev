@@ -5,15 +5,16 @@
 #include "xdl.h"
 #include <cinttypes>
 #include "logging.h"
-#include "jni_helper.h"
 #include "global.h"
 #include "system_util.h"
 #include <android/api-level.h>
 #include "jni_hook.h"
-#include "ArtMethodHandle.h"
+#include "utils/jni_helper.hpp"
+
 
 
 JavaVM *gVm = nullptr;
+using namespace binder_canary;
 
 static struct BinderCanary_t{
     jclass javaClass = nullptr;
@@ -33,18 +34,13 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *) {
 
 JNI_STATIC_METHOD(jboolean, init)(JNIEnv *env, jclass clazz, jobject monitor_config) {
     if (hasInit) {
-        LOGW(">> multi call init method，already init!!");
+        LOGW(">> multi call init method，already checkInit!!");
         return false;
     }
-    using namespace common;
-    if (ArtMethodHandle::get().initialize(gVm)) {
-        LOGW(">> init ArtMethodHandle failed");
-        return false;
-    }
+    using namespace lsplant;
 
-
-    auto canaryClazz = (jclass) env->NewGlobalRef(env->FindClass("com/zipper/develop/binder/canary/BinderCanary"));
-
+    gBinderCanaryT.javaClass = (jclass) env->NewGlobalRef(env->FindClass("com/zipper/develop/binder/canary/BinderCanary"));
+    gBinderCanaryT.onReportMethod = JNI_GetStaticMethodID(env, gBinderCanaryT.javaClass, "onReport", "(IILjava/lang/String;)V");
 
     init_java_monitor_type(env, monitor_config);
 

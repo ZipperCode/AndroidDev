@@ -526,12 +526,12 @@ int bh_dl_monitor_init(void) {
   bh_dl_monitor_initing = true;
   if (!inited) {
     __atomic_store_n(&inited, true, __ATOMIC_SEQ_CST);
-    BH_LOG_INFO("DL monitor: pre init");
+    BH_LOG_INFO("DL monitor: pre checkInit");
     if (0 == (r = bh_dl_monitor_hook())) {
       __atomic_store_n(&inited_ok, true, __ATOMIC_SEQ_CST);
-      BH_LOG_INFO("DL monitor: post init, OK");
+      BH_LOG_INFO("DL monitor: post checkInit, OK");
     } else {
-      BH_LOG_ERROR("DL monitor: post init, FAILED");
+      BH_LOG_ERROR("DL monitor: post checkInit, FAILED");
     }
   } else {
     r = inited_ok ? 0 : -1;

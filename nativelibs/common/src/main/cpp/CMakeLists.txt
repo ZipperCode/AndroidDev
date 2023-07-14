@@ -10,7 +10,7 @@ include_directories(.)
 add_library(common STATIC ${SRC})
 
 find_library(log-lib log)
-target_include_directories(common PUBLIC include .)
+target_include_directories(common PUBLIC include . utils)
 
 if(USEASAN)
     target_compile_options(common PUBLIC -fsanitize=address -fno-omit-frame-pointer)

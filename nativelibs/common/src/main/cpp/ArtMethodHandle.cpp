@@ -8,6 +8,8 @@
 #include "include/common_jni_helper.h"
 #include "include/modifiers.h"
 
+#include "utils/jni_helper.hpp"
+
 #define JAVA_ART_METHOD "com/zipper/common/ArtMethod"
 #define OFFSET_METHOD_1 "nativeStub1"
 #define OFFSET_METHOD_2 "nativeStub2"
@@ -39,7 +41,7 @@ namespace common {
 
     bool ArtMethodHandle::initialize(JavaVM *vm) {
         if (this->vm_ != nullptr) {
-            LOGE("ArtMethodHandle::initialize fail > already init");
+            LOGE("ArtMethodHandle::initialize fail > already checkInit");
             return JNI_FALSE;
         }
 
