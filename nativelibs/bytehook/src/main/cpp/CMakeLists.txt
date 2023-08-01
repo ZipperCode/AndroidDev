@@ -13,7 +13,7 @@ file(GLOB SRC *.c)
 add_library(bytehook STATIC ${SRC})
 
 # 预编译功能 <target> <PRIVATE|PUBLIC|INTERFACE> <feature> [...]
-target_compile_features(bytehook PUBLIC c_std_11)
+target_compile_features(bytehook PUBLIC c_std_17)
 # 添加编译参数
 target_compile_options(bytehook PUBLIC -Weverything -Werror)
 # 包含编译目录

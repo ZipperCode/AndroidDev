@@ -21,8 +21,7 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
         BinderCanary.init(new MonitorConfig());
-        assertEquals("com.zipper.develop.binder.canary.test", appContext.getPackageName());
+        assertTrue(BinderCanary.monitor());
     }
 }

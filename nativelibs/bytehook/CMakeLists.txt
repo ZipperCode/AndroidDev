@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.22.1)
 
-set(MODULE_NAME "xdl")
+set(MODULE_NAME "bytehook")
 
 #set(LIB_STATIC_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../libs-static)
-
-# 静态库输出路径
+#
+## 静态库输出路径
 #set(STATIC_OUTPUT ${LIB_STATIC_ROOT}/${CMAKE_BUILD_TYPE}/${MODULE_NAME}/${ANDROID_ABI})
-#message("xdl静态库输出目录为 = ${STATIC_OUTPUT}")
+#message("bytehook静态库输出目录为 = ${STATIC_OUTPUT}")
 
 #set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${STATIC_OUTPUT})
 set(SUB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/main/cpp)

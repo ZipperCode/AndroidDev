@@ -14,9 +14,8 @@ android {
         consumerProguardFiles "consumer-rules.pro"
         externalNativeBuild {
             cmake {
-                targets "xdl"
+                targets "xhook"
                 cppFlags "-std=c++20 -Oz -fvisibility=hidden"
-                // cFlags "-std=c17 -Oz -fvisibility=hidden"
                 abiFilters rootProject.ext.abiFilters as String[]
             }
         }
@@ -44,7 +43,7 @@ android {
     }
 
     prefab {
-        xdl {
+        xhook {
             headers 'src/main/cpp/include'
         }
     }

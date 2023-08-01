@@ -8,6 +8,7 @@
 
 #include "system_util.h"
 #include "global.h"
+#include "logging.h"
 
 namespace binder_canary {
 
@@ -44,7 +45,7 @@ namespace binder_canary {
         /**
          * 传输超过阻塞时间回调
          */
-        typedef void(*OnTransactBlock)(const T &, long);
+        typedef void(*OnTransactBlock)(const T &);
 
     public:
         MonitorDispatcher(OnTransactDataLarge onTransactDataLarge = nullptr, OnTransactBlock onTransactBlock = nullptr)
@@ -54,6 +55,7 @@ namespace binder_canary {
 
     public:
         void onTransactStart(T &callInfo) {
+            LOGI("onTransactStart >> ");
             if (enableMonitorLargeData(callInfo) && onTransactDataLarge_ != nullptr) {
                 // 监控大数据
                 onTransactDataLarge_(callInfo);
@@ -62,19 +64,23 @@ namespace binder_canary {
 
         void onTransactEnd(T &callInfo) {
             if (nullptr == onTransactBlock_) {
+                LOGI("onTransactEnd << null");
                 return;
             }
             if (!enableMainThreadMonitor()) {
+                LOGI("onTransactEnd << disable");
                 return;
             }
 
             if (isOneWay(callInfo)) {
+                LOGI("onTransactEnd << oneway");
                 return;
             }
 
-            long castTime = callInfo.castTime();
+            long castTime = callInfo.costTime();
+            LOGI("onTransactEnd << castTime = %ld", callInfo.costTime());
             if (castTime > gMonitorConfig.block_time_threshold_mills) {
-                onTransactBlock_(callInfo, castTime);
+                onTransactBlock_(callInfo);
             }
         }
 

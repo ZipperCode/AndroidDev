@@ -36,6 +36,7 @@ include ':develop:binder-canary'
 include ':develop:binder-canary-sample'
 
 include ':nativelibs'
-include ':nativelibs:bhook'
+include ':nativelibs:bytehook'
 include ':nativelibs:xdl'
 include ':nativelibs:common'
+include ':nativelibs:xhook'

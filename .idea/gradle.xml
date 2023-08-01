@@ -7,6 +7,7 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="11" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -19,9 +20,10 @@
             <option value="$PROJECT_DIR$/hidden-api-bypass/unsafe" />
             <option value="$PROJECT_DIR$/lib-aspectj-ipc" />
             <option value="$PROJECT_DIR$/nativelibs" />
-            <option value="$PROJECT_DIR$/nativelibs/bhook" />
+            <option value="$PROJECT_DIR$/nativelibs/bytehook" />
             <option value="$PROJECT_DIR$/nativelibs/common" />
             <option value="$PROJECT_DIR$/nativelibs/xdl" />
+            <option value="$PROJECT_DIR$/nativelibs/xhook" />
           </set>
         </option>
       </GradleProjectSettings>

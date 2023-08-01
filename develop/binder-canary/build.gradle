@@ -26,6 +26,7 @@ android {
         }
 
         ndk {
+            //noinspection ChromeOsAbiSupport
             abiFilters rootProject.ext.abiFilters as String[]
         }
 
@@ -50,16 +51,26 @@ android {
         prefab true
     }
 
+    packagingOptions {
+        exclude 'lib/arm64-v8a/libbytehook.so'
+        exclude 'lib/arm64-v8a/libxdl.so'
+    }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
     }
 }
 
 dependencies {
     implementation project(':nativelibs:xdl')
+//    implementation 'io.github.hexhacking:xdl:2.0.0'
     implementation project(':nativelibs:common')
-    implementation project(':nativelibs:bhook')
+    implementation project(':nativelibs:bytehook')
+//        implementation 'com.bytedance:bytehook:1.0.7'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     testImplementation 'junit:junit:4.13.2'

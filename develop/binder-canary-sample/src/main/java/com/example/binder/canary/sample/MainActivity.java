@@ -19,5 +19,6 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
         BinderCanary.init(new MonitorConfig());
+        BinderCanary.monitor();
     }
 }

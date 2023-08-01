@@ -7,9 +7,10 @@
 
 #include <jni.h>
 #include "system_util.h"
+#include "monitor_filter.h"
 #include <android/api-level.h>
 #include <ostream>
-
+#include "xdl.h"
 /**
  * JNI Hook 定义 将指定方法替换为代理方法
  *      HOOK_JNI(void*, fun, int, int)
@@ -29,22 +30,14 @@
     TypeName(const TypeName &) = delete;                                                           \
     void operator=(const TypeName &) = delete
 
-inline void *dlsym(void *handler, const char *name) {
-    return xdl_dsym(handler, name, nullptr)
-}
-
 #define CREATE_FUNC_SYMBOL_ENTRY(ret, func, ...)                                                   \
     typedef ret (*func##Type)(__VA_ARGS__);                                                        \
     inline static ret (*func##Sym)(__VA_ARGS__);                                                   \
     inline static ret func(__VA_ARGS__)
 
-namespace binder_canary {
-
+namespace {
     // https://cs.android.com/android/platform/superproject/+/refs/heads/master:frameworks/native/libs/binder/include/binder/Parcel.h
-    class Parcel {
-    };
-
-    typedef void *HookFunc_t;
+    class Parcel;
 
     class SharedBuffer {
         SharedBuffer(const SharedBuffer&);
@@ -99,6 +92,11 @@ namespace binder_canary {
         const char16_t *mString;
     };
 
+}
+
+namespace binder_canary {
+
+    typedef void *HookFunc_t;
 
     typedef int32_t status_t;
 
@@ -109,34 +107,49 @@ namespace binder_canary {
     /// size_t size() const;
     CREATE_FUNC_SYMBOL_ENTRY(size_t, String16Size, const String16 *);
 
-    class BpBinderHooker {
+    namespace bp_binder_hooker {
 
-    protected:
-        static bool checkInit(JavaVM *vm);
 
-        static bool Hook(JavaVM *vm);
+        bool checkInit(JavaVM *vm);
+        bool Hook(JavaVM *vm);
+        bool UnHook(JavaVM *vm);
 
-        static bool UnHook(JavaVM *vm);
+    }
 
-    protected:
-        static bool hasInit_;
-        static bool hasInitSuccess_;
-        static HookFunc_t binderTransactFunc_;
+    namespace binder_proxy_hooker {
+        class BinderProxyCallInfo;
 
-        static IBinderGetInterfaceDescriptorType iBinderGetInterfaceDescriptorSym;
-        static ParcelDataSizeType parcelDataSizeSym_;
-    };
+        bool checkInit(JavaVM *vm);
 
-    class BinderProxyHooker {
+        bool Hook(JavaVM *vm);
 
-    protected:
-        static bool checkInit(JavaVM *vm);
+        bool UnHook(JavaVM *vm);
 
-        static bool Hook(JavaVM *vm);
 
-        static bool UnHook(JavaVM *vm);
+        class BinderProxyCallInfo : public TransactCallInfo {
+        public:
+            BinderProxyCallInfo(
+                    JNIEnv *env, jobject obj, jint code, jobject data_obj, jint flags
+            ) : TransactCallInfo(),
+                env_(env), obj_(obj), code_(code), data_obj_(data_obj), flags_(flags) {}
 
-    };
+        public:
+            [[nodiscard]] int flags() const override {
+                return 0;
+            }
+
+            [[nodiscard]] int dataSize() const override {
+                return 0;
+            }
+
+        public:
+            JNIEnv *env_;
+            jobject obj_;
+            jint code_;
+            jobject data_obj_;
+            jint flags_;
+        };
+    }
 
     class XdlHandle {
     public:

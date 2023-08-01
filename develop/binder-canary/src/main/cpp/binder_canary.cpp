@@ -8,6 +8,7 @@
 #include "global.h"
 #include "system_util.h"
 #include <android/api-level.h>
+#include <bytehook.h>
 #include "jni_hook.h"
 #include "utils/jni_helper.hpp"
 
@@ -29,6 +30,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *) {
         return JNI_ERR;
     }
     gVm = vm;
+
     return JNI_VERSION_1_6;
 }
 
@@ -38,6 +40,7 @@ JNI_STATIC_METHOD(jboolean, init)(JNIEnv *env, jclass clazz, jobject monitor_con
         return false;
     }
     using namespace lsplant;
+    bytehook_init(0, true);
 
     gBinderCanaryT.javaClass = (jclass) env->NewGlobalRef(env->FindClass("com/zipper/develop/binder/canary/BinderCanary"));
     gBinderCanaryT.onReportMethod = JNI_GetStaticMethodID(env, gBinderCanaryT.javaClass, "onReport", "(IILjava/lang/String;)V");
@@ -53,9 +56,9 @@ JNI_STATIC_METHOD(jboolean, init)(JNIEnv *env, jclass clazz, jobject monitor_con
 }
 
 JNI_STATIC_METHOD(jboolean, monitor)(JNIEnv *env, jclass clazz) {
-    return JNI_FALSE;
+    return bp_binder_hooker::Hook(gVm);
 }
 
 JNI_STATIC_METHOD(jboolean, unmonitored)(JNIEnv *env, jclass clazz) {
-    return JNI_FALSE;
+    return bp_binder_hooker::UnHook(gVm);
 }

@@ -18,6 +18,9 @@ object BinderCanary {
     @JvmStatic
     external fun unmonitored(): Boolean
 
+    fun initByteHook() {
+    }
+
     @JvmStatic
     fun onReport(errorCode: Int, dataSize: Int, backtrace: String) {
 
