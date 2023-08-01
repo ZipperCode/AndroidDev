@@ -18,7 +18,7 @@ namespace common {
     }
     /// 注册JNI函数
     static inline int registerNatives(JNIEnv *env, const jclass clazz, const JNINativeMethod *methods) {
-        LOGD("func size = %d", sizeof(*methods) / sizeof(methods[0]));
+        // LOGD("func size = %u", sizeof(*methods) / sizeof(methods[0]));
         return env->RegisterNatives(clazz, methods, sizeof(*methods) / sizeof(methods[0]));
     }
 } // namespace common end

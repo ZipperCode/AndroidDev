@@ -64,11 +64,11 @@ namespace binder_canary {
 
         void onTransactEnd(T &callInfo) {
             if (nullptr == onTransactBlock_) {
-                LOGI("onTransactEnd << null");
+                LOGW("onTransactEnd << null");
                 return;
             }
             if (!enableMainThreadMonitor()) {
-                LOGI("onTransactEnd << disable");
+                LOGI("onTransactEnd << disable not main thread");
                 return;
             }
 

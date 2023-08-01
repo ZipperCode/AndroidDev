@@ -14,7 +14,7 @@ find_package(bytehook REQUIRED CONFIG)
 add_library(
         canary
         SHARED
-        binder_canary.cpp
+        binder_jni.cpp
         binder_hook.cpp
 )
 

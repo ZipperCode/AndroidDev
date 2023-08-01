@@ -31,16 +31,6 @@ namespace binder_canary {
     } gMonitorConfig;
 
 
-    static struct JavaTrace {
-        // android.util.Log
-        jclass logClass = nullptr;
-        // android.util.Log
-        jmethodID getStackTraceStringMethodId = nullptr;
-        // java.lang.Throwable
-        jclass throwableClass = nullptr;
-        jmethodID throwConstructorMethodId = nullptr;
-    } gTrace;
-
     static void init_java_monitor_type(JNIEnv *env, jobject target) {
         auto configClazz = env->FindClass("com/zipper/develop/binder/canary/MonitorConfig");
         gMonitorConfigOffsetT.clazz = reinterpret_cast<jclass>(
@@ -54,29 +44,6 @@ namespace binder_canary {
         gMonitorConfigOffsetT.large_data_factor_field = env->GetFieldID(configClazz, "largeDataFactor", "F");
     }
 
-    static void initTrace(JNIEnv *env) {
-        auto logClass = env->FindClass("android/util/Log");
-        gTrace.logClass = lsplant::JNI_NewGlobalRef(env, logClass);
-        gTrace.getStackTraceStringMethodId = env->GetStaticMethodID(logClass, "getStackTraceString", "(Ljava/lang/Throwable;)Ljava/lang/String;");
-        gTrace.throwableClass = env->FindClass("java/lang/Throwable");
-        gTrace.throwConstructorMethodId = env->GetMethodID(gTrace.throwableClass, "<init>", "()V");
-    }
-
-    static inline jobject getThrowableObject(JNIEnv *env) {
-        if (gTrace.throwableClass == nullptr || gTrace.throwConstructorMethodId == nullptr) {
-            return nullptr;
-        }
-        return env->NewObject(gTrace.throwableClass, gTrace.throwConstructorMethodId);
-    }
-
-    static inline jstring getStackTrace(JNIEnv *env) {
-        if (gTrace.logClass == nullptr || gTrace.getStackTraceStringMethodId == nullptr) {
-            return nullptr;
-        }
-        auto throwableObj = getThrowableObject(env);
-        jstring stackTraceStr = static_cast<jstring>(env->CallStaticObjectMethod(gTrace.logClass, gTrace.getStackTraceStringMethodId, throwableObj));
-        return stackTraceStr;
-    }
 
     static inline bool get_monitor_in_main_thread(JNIEnv *env) {
         return env->GetBooleanField(

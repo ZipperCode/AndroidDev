@@ -3,8 +3,8 @@
 //
 #pragma once
 
-#ifndef ANDROIDDEV_BINDER_CANARY_H
-#define ANDROIDDEV_BINDER_CANARY_H
+#ifndef ANDROIDDEV_BINDER_JNI_H
+#define ANDROIDDEV_BINDER_JNI_H
 
 #include <android/log.h>
 
@@ -31,5 +31,5 @@ JNI_STATIC_METHOD(jboolean, unmonitored)(JNIEnv *env, jclass clazz);
 
 
 
-#endif //ANDROIDDEV_BINDER_CANARY_H
+#endif //ANDROIDDEV_BINDER_JNI_H
 

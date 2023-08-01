@@ -1,7 +1,7 @@
 
 #include <jni.h>
 #include <string>
-#include "binder_canary.h"
+#include "binder_jni.h"
 #include "xdl.h"
 #include <cinttypes>
 #include "logging.h"

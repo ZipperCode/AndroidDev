@@ -8,6 +8,8 @@
 #include "logging.h"
 #include "monitor_filter.h"
 #include "utils/jni_helper.hpp"
+#include "utils/bridge_helper.hpp"
+
 
 #if INTPTR_MAX == INT32_MAX
 #define BINDER_SYSTEM_LIB_PATH "/system/lib/libbinder.so"
@@ -207,22 +209,19 @@ namespace binder_canary {
         }
 
         void OnTransactDataLarge(const BpBinderCallInfo &callInfo){
-
+            if (gVm == nullptr) {
+                return;
+            }
+            LOGI("Binder数据过大，大小 = %d", callInfo.dataSize());
+            comm::printJavaStackTrace(gVm);
         }
 
         void onTransactBlock(const BpBinderCallInfo &callInfo) {
             if (gVm == nullptr) {
                 return;
             }
-            LOGD("cost = %ld, dataSize = %d", callInfo.costTime(), callInfo.dataSize());
-
-            JNIEnv *env;
-            if (gVm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK){
-                return;
-            }
-
-            auto traceStr = getStackTrace(env);
-            LOGD("trace = %s", convertChar(env, traceStr));
+            LOGI("Binder耗时 = %ld ms, 数据大小 = %d", callInfo.costTime(), callInfo.dataSize());
+            comm::printJavaStackTrace(gVm);
         }
 
     }

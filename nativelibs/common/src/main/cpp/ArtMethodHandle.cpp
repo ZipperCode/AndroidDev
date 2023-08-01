@@ -7,6 +7,7 @@
 #include "include/logging.h"
 #include "include/common_jni_helper.h"
 #include "include/modifiers.h"
+#include "include/utils/bridge_helper.hpp"
 
 #include "utils/jni_helper.hpp"
 
@@ -64,7 +65,7 @@ namespace common {
         LOGD("ArtMethod >> ArtMethod size = %d", this->artMethodSize_);
         LOGD("ArtMethod >> native_stub1 = %p", native_stub1);
         LOGD("ArtMethod >> native_stub2 = %p", native_stub2);
-        LOGD("ArtMethod >> offset = %d", ((size_t) nativeOffset - (size_t) native_stub1));
+        LOGD("ArtMethod >> offset = %u", ((size_t) nativeOffset - (size_t) native_stub1));
         auto jniOffset1Method = native_stub1;
         auto artMethod = reinterpret_cast<size_t *>(nativeOffset);
         for (int i = 0; i < this->artMethodSize_; i++) {
